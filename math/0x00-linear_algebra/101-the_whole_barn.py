@@ -52,7 +52,7 @@ def add_matrices(mat1, mat2):
 
     # Add arrays
     # TODO: Pass all to a function
-    if isinstance(mat1[0], list) and isinstance(mat2[0], list):
+    if type(mat1[0]) == list and type(mat2[0]) == list:
         if len(mat1) != len(mat2):
             return None
 
@@ -72,24 +72,24 @@ def add_matrices(mat1, mat2):
             ] for i in range(len(mat2))
         ]
 
-    # if isinstance(mat1[0], type(1)) and len(mat1) == len(mat2):
-    #     for i in range(len(mat1)):
-    #         new_m += [mat1[i] + mat2[i]]
-    #     return new_m
+    if isinstance(mat1[0], type(1)) and len(mat1) == len(mat2):
+        for i in range(len(mat1)):
+            new_m += [mat1[i] + mat2[i]]
+        return new_m
 
-    # for i in zip(mat1, mat2):
-    #     suma = []
-    #     matrix1, matrix2 = i
-    #     if len(matrix1) != len(matrix2):
-    #         return None
-    #     for i in range(len(matrix1)):
-    #         suma += [matrix1[i] + matrix2[i]]
-    #     new_m += [suma]
+    for i in zip(mat1, mat2):
+        suma = []
+        matrix1, matrix2 = i
+        if len(matrix1) != len(matrix2):
+            return None
+        for i in range(len(matrix1)):
+            suma += [matrix1[i] + matrix2[i]]
+        new_m += [suma]
 
-    # return new_m
-    result = []
-    for vec in range(len(mat1)):
-        result.append(
-            add_matrices(mat1[vec], mat2[vec])
-        )
-    return result
+    return new_m
+    # result = []
+    # for vec in range(len(mat1)):
+    #     result.append(
+    #         add_matrices(mat1[vec], mat2[vec])
+    #     )
+    # return result
