@@ -63,13 +63,10 @@ def add_matrices(mat1, mat2):
 
     # 2d
     if len(shape_matrix_one) == 2:
-        if len(mat1) != len(mat2) or len(mat1[0]) != len(mat2[0]):
-            return None
-
         return [
             [
-                mat1[i][j] + mat2[i][j] for j in range(len(mat2[0]))
-            ] for i in range(len(mat2))
+                mat1[i][j] + mat2[i][j] for j in range(len(mat1[0]))
+            ] for i in range(len(mat1))
         ]
 
     if isinstance(mat1[0], type(1)) and len(mat1) == len(mat2):
