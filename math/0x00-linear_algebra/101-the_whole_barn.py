@@ -45,12 +45,14 @@ def add_matrices(mat1, mat2):
     """
     new_m = []
 
-    if validate_matrix(mat1) != validate_matrix(mat2):
+    shape_matrix_one = validate_matrix(mat1)
+    shape_matrix_two = validate_matrix(mat2)
+    if shape_matrix_one != shape_matrix_two:
         return None
 
     # Add arrays
     # TODO: Pass all to a function
-    if type(mat1[0]) != list:
+    if isinstance(mat1[0], list) and isinstance(mat2[0], list):
         if len(mat1) != len(mat2):
             return None
 
@@ -58,6 +60,17 @@ def add_matrices(mat1, mat2):
         for i in range(len(mat1)):
             result.append(mat1[i] + mat2[i])
         return result
+
+    # 2d
+    if len(shape_matrix_one) == 2:
+        if len(mat1) != len(mat2) or len(mat1[0]) != len(mat2[0]):
+            return None
+
+        return [
+            [
+                mat1[i][j] + mat2[i][j] for j in range(len(mat2[0]))
+            ] for i in range(len(mat2))
+        ]
 
     if isinstance(mat1[0], type(1)) and len(mat1) == len(mat2):
         for i in range(len(mat1)):
