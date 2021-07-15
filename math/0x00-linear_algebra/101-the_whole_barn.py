@@ -52,7 +52,7 @@ def add_matrices(mat1, mat2):
 
     # Add arrays
     # TODO: Pass all to a function
-    if type(mat1[0]) == list:
+    if type(mat1[0]) != list and len(shape_matrix_one) == 1:
         if len(mat1) != len(mat2):
             return None
 
@@ -80,10 +80,13 @@ def add_matrices(mat1, mat2):
     for i in zip(mat1, mat2):
         suma = []
         matrix1, matrix2 = i
+
         if len(matrix1) != len(matrix2):
             return None
+
         for i in range(len(matrix1)):
             suma += [matrix1[i] + matrix2[i]]
+
         new_m += [suma]
 
     return new_m
