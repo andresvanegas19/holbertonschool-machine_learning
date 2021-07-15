@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-""" This is a script that contain a function
-That will add two matrices """
+"""
+    This is a script that contain a function that will add two matrices
+"""
 
 
 def validate_matrix(matrix_one) -> bool:
@@ -46,6 +47,17 @@ def add_matrices(mat1, mat2):
 
     if validate_matrix(mat1) != validate_matrix(mat2):
         return None
+
+    # Add arrays
+    # TODO: Pass all to a function
+    if type(mat1[0]) != list:
+        if len(mat1) != len(mat2):
+            return None
+
+        result = []
+        for i in range(len(mat1)):
+            result.append(mat1[i] + mat2[i])
+        return result
 
     if isinstance(mat1[0], type(1)) and len(mat1) == len(mat2):
         for i in range(len(mat1)):
