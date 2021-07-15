@@ -69,24 +69,23 @@ def add_matrices(mat1, mat2):
             ] for i in range(len(mat1))
         ]
 
-    if isinstance(mat1[0], type(1)) and len(mat1) == len(mat2):
-        for i in range(len(mat1)):
-            new_m += [mat1[i] + mat2[i]]
-        return new_m
+    return [
+        add_matrices(mat1[i], mat2[i]) for i in range(len(mat1))
+    ]
 
-    for i in zip(mat1, mat2):
-        suma = []
-        matrix1, matrix2 = i
+    # for i in zip(mat1, mat2):
+    #     suma = []
+    #     matrix1, matrix2 = i
 
-        if len(matrix1) != len(matrix2):
-            return None
+    #     if len(matrix1) != len(matrix2):
+    #         return None
 
-        for i in range(len(matrix1)):
-            suma += [matrix1[i] + matrix2[i]]
+    #     for i in range(len(matrix1)):
+    #         suma += [matrix1[i] + matrix2[i]]
 
-        new_m += [suma]
+    #     new_m += [suma]
 
-    return new_m
+    # return new_m
     # result = []
     # for vec in range(len(mat1)):
     #     result.append(
