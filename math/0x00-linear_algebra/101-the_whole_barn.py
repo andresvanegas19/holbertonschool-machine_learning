@@ -62,7 +62,7 @@ def add_matrices(mat1, mat2):
         return result
 
     # 2d
-    if len(shape_matrix_one) == 2:
+    if len(shape_matrix_one) == 2 and len(shape_matrix_two) == 2:
         if len(mat1) != len(mat2) or len(mat1[0]) != len(mat2[0]):
             return None
 
@@ -72,18 +72,24 @@ def add_matrices(mat1, mat2):
             ] for i in range(len(mat2))
         ]
 
-    if isinstance(mat1[0], type(1)) and len(mat1) == len(mat2):
-        for i in range(len(mat1)):
-            new_m += [mat1[i] + mat2[i]]
-        return new_m
+    # if isinstance(mat1[0], type(1)) and len(mat1) == len(mat2):
+    #     for i in range(len(mat1)):
+    #         new_m += [mat1[i] + mat2[i]]
+    #     return new_m
 
-    for i in zip(mat1, mat2):
-        suma = []
-        matrix1, matrix2 = i
-        if len(matrix1) != len(matrix2):
-            return None
-        for i in range(len(matrix1)):
-            suma += [matrix1[i] + matrix2[i]]
-        new_m += [suma]
+    # for i in zip(mat1, mat2):
+    #     suma = []
+    #     matrix1, matrix2 = i
+    #     if len(matrix1) != len(matrix2):
+    #         return None
+    #     for i in range(len(matrix1)):
+    #         suma += [matrix1[i] + matrix2[i]]
+    #     new_m += [suma]
 
-    return new_m
+    # return new_m
+    result = []
+    for vec in range(len(mat1)):
+        result.append(
+            add_matrices(mat1[vec], mat2[vec])
+        )
+    return result
