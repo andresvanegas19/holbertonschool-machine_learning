@@ -43,8 +43,6 @@ def add_matrices(mat1, mat2):
     Returns:
         [type]: [description]
     """
-    new_m = []
-
     shape_matrix_one = validate_matrix(mat1)
     shape_matrix_two = validate_matrix(mat2)
     if shape_matrix_one != shape_matrix_two:
@@ -56,6 +54,7 @@ def add_matrices(mat1, mat2):
         if len(mat1) != len(mat2):
             return None
 
+        # TODO: make in one array
         result = []
         for i in range(len(mat1)):
             result.append(mat1[i] + mat2[i])
@@ -69,6 +68,7 @@ def add_matrices(mat1, mat2):
             ] for i in range(len(mat1))
         ]
 
+    # TODO: Sum in another way
     return [
         add_matrices(mat1[i], mat2[i]) for i in range(len(mat1))
     ]
