@@ -36,7 +36,7 @@ def check_axis_1(mat1, mat2, len_mat):
     return new_matrix
 
 
-def shape(matrix_one) -> bool:
+def shape(matrix) -> bool:
     """
     calculate the shape of the matrix
 
@@ -47,15 +47,10 @@ def shape(matrix_one) -> bool:
         Return: the shape of the matrix
         bool: [description]
     """
-    i = len(matrix_one)
-    matrix_dimensions = [i]
+    if isinstance(matrix[0], list):
+        return [len(matrix)] + shape(matrix[0])
 
-    while type(matrix_one[0]) == list:
-        matrix_one = matrix_one[0]
-        i = len(matrix_one)
-        matrix_dimensions.append(i)
-
-    return matrix_dimensions
+    return [len(matrix)]
 
 
 def cat_matrices(mat1, mat2, axis=0):
