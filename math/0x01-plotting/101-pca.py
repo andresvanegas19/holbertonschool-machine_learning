@@ -5,9 +5,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-lib = np.load('pca.npz')
-data = lib['data']
-labels = lib['target']
+# lib =
+data = np.load('./data-pca.npy')
+labels = np.load('./labels-pca.npy')
 
 data_means = np.mean(data, axis=0)
 norm_data = data - data_means
