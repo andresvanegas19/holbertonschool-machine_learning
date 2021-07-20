@@ -14,7 +14,11 @@ plt.bar(bars, fruit[2], width=0.3, bottom=np.array(
 plt.bar(bars, fruit[3], width=0.3, bottom=np.array(fruit[0]) +
         np.array(fruit[1])+np.array(fruit[2]), color='#ffe5b4')
 
+plt.title('Number of Fruit per Person')
+plt.ylabel('Quantity of Fruit')
 plt.xticks(np.arange(len(name)), name, size="xx-large")
 plt.yticks(np.arange(0, 90, 10))
+plt.legend(name)
+
 
 plt.show()

@@ -17,7 +17,7 @@ cbar = plt.colorbar()
 
 cbar.set_label('elevation (m)')
 axes.set_title('Mountain Elevation')
-axes.set_xlabel('y coordinate (m)')
-axes.set_ylabel('x coordinate (m)')
+axes.set_xlabel('x coordinate (m)')
+axes.set_ylabel('y coordinate (m)')
 
 plt.show()

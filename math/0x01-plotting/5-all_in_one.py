@@ -36,6 +36,7 @@ ax = fig.add_subplot(3, 2, 1)
 ax.plot(range(len(y0)), y0, color='red')
 ax.set_yticks(np.arange(0, 1500, 500))
 ax.set_xticks(np.arange(0, 11))
+# ax.legend(prop={'size': "x-small"})
 
 # add a scatter plot
 ax1 = fig.add_subplot(3, 2, 2)
@@ -46,6 +47,7 @@ ax1.set_xticks(np.arange(60, 90, 10))
 ax1.set_xlabel('Height (in)')
 ax1.set_ylabel('Weight (lbs)')
 ax1.set_title('Men\'s Height vs Weight')
+# ax1.legend(prop={'size': "x-small"})
 
 
 # add a linear plot
@@ -56,6 +58,7 @@ ax2.set_yscale('log')
 ax2.set_xlabel('Height (in)')
 ax2.set_ylabel('Weight (lbs)')
 ax2.set_title('Men\'s Height vs Weight')
+# ax2.legend(prop={'size': "x-small"})
 
 # add a linear a plot
 ax3 = fig.add_subplot(3, 2, 4)
@@ -68,7 +71,7 @@ ax3.set_title('Exponential Decay of Radioactive Elements', fontsize=5)
 
 ax3.plot(x3, y31, color='red', linestyle='dashed', label='C-14')
 ax3.plot(x3, y32, color="green", label='Ra-226')
-ax3.legend(prop={'size': 3})
+# ax3.legend(prop={'size': "x-small"})
 
 
 # add the histogrm
