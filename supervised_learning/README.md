@@ -1,0 +1,1 @@
+All algo for make supervice learning
