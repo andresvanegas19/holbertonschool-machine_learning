@@ -3,10 +3,11 @@
 import tensorflow.keras as Keras
 
 
-def train_model(network, data, labels, batch_size, epochs,
-                validation_data=None, early_stopping=False,
-                patience=0, learning_rate_decay=False, alpha=0.1,
-                decay_rate=1, verbose=True, shuffle=False):
+def train_model(network, data, labels, batch_size, epochs, validation_data=None,
+                early_stopping=False, patience=0, learning_rate_decay=False,
+                alpha=0.1, decay_rate=1, save_best=False, filepath=None,
+                verbose=True, shuffle=False
+                ):
     """
     trains a model using mini-batch gradient descent:
 
@@ -34,23 +35,31 @@ def train_model(network, data, labels, batch_size, epochs,
     Returns: the History object generated after training the model
     """
 
-    def learning_rate_decay(epoch):
+    def sch(epoch):
         """ callback that calculate the epic of the rate of a range"""
-        alpha_utd = alpha / (1 + (decay_rate * epoch))
-        return alpha_utd
+        return alpha / (1 + (decay_rate * epoch))
 
     callbacks = []
 
-    if early_stopping:
-        EarlyStopping = Keras.callbacks.EarlyStopping(patience=patience)
-        callbacks.append(EarlyStopping)
-
-    if learning_rate_decay:
-        decay = Keras.callbacks.LearningRateScheduler(
-            learning_rate_decay,
-            verbose=1
+    if early_stopping is True:
+        # EarlyStopping
+        callbacks.append(
+            Keras.callbacks.EarlyStopping(patience=patience)
         )
-        callbacks.append(decay)
+
+    if learning_rate_decay and validation_data:
+        # decay
+        callbacks.append(
+            Keras.callbacks.LearningRateScheduler(
+                sch,
+                verbose=1
+            )
+        )
+
+    if save_best and validation_data:
+        callbacks.append(
+            Keras.callbacks.ModelCheckpoint(filepath, save_best_only=True)
+        )
 
     return network.fit(
         data,
