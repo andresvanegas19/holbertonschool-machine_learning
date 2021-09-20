@@ -1,6 +1,5 @@
-
 #!/usr/bin/env python3
-""" Mde a cnn with keras """
+""" Made a cnn with keras """
 
 
 import tensorflow.keras as Keras
