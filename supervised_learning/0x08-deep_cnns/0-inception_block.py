@@ -25,57 +25,63 @@ def inception_block(A_prev, filters):
             1x1 convolution after the max pooling
     Returns: the concatenated output of the inception block
     """
-    F1, F3R, F3, F5R, F5, FPP = filters
+    F1 = filters[0]
+    F3R = filters[1]
+    F3 = filters[2]
+    F5R = filters[3]
+    F5 = filters[4]
+    FPP = filters[5]
+    padding = "same"
 
-    conv = K.layers.Conv2D(
-        F1,
-        1,
+    he_init = K.initializers.he_normal()
+
+    CF1 = K.layers.Conv2D(
+        filters=F1, kernel_size=(1, 1),
+        padding=padding,
         activation='relu',
-        kernel_initializer='he_normal'
+        kernel_initializer=he_init
     )(A_prev)
-
-    conv_1 = K.layers.Conv2D(
-        F3R,
-        1,
+    CF3R = K.layers.Conv2D(
+        filters=F3R,
+        kernel_size=(1, 1),
+        padding=padding,
         activation='relu',
-        kernel_initializer='he_normal'
+        kernel_initializer=he_init
     )(A_prev)
-
-    convd_2 = K.layers.Conv2D(
-        F3,
-        3,
-        padding='same',
+    CF3 = K.layers.Conv2D(
+        filters=F3,
+        kernel_size=3,
+        padding=padding,
         activation='relu',
-        kernel_initializer='he_normal'
-    )(conv_1)
-
-    conv_3 = K.layers.Conv2D(
-        F5R, 1,
+        kernel_initializer=he_init
+    )(CF3R)
+    CF5R = K.layers.Conv2D(
+        filters=F5R,
+        kernel_size=(1, 1),
+        padding=padding,
         activation='relu',
-        kernel_initializer='he_normal'
+        kernel_initializer=he_init
     )(A_prev)
-
-    conv_4 = K.layers.Conv2D(
-        F5,
-        5,
-        padding='same',
+    CF5 = K.layers.Conv2D(
+        filters=F5,
+        kernel_size=(5, 5),
+        padding=padding,
         activation='relu',
-        kernel_initializer='he_normal'
-    )(conv_3)
-
-    max_pooling = K.layers.MaxPool2D(
-        3,
-        1,
-        padding='same'
+        kernel_initializer=he_init
+    )(CF5R)
+    M_pooling = K.layers.MaxPooling2D(
+        pool_size=(3, 3),
+        strides=1,
+        padding=padding
     )(A_prev)
-
-    last_layer = K.layers.Conv2D(
-        FPP,
-        1,
+    C_FPP = K.layers.Conv2D(
+        filters=FPP,
+        kernel_size=1,
+        padding=padding,
         activation='relu',
-        kernel_initializer='he_normal'
-    )(max_pooling)
+        kernel_initializer=he_init
+    )(M_pooling)
 
-    return K.layers.concatenate(
-        [conv, convd_2, conv_4, last_layer]
-    )
+    zab = [CF1, CF3, CF5, C_FPP]
+
+    return K.layers.concatenate(zab)
