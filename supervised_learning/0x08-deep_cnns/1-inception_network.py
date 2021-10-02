@@ -2,7 +2,7 @@
 """ Deep Convolutional Architectures """
 
 
-import tensorflow.keras as K
+import tensorflow.keras as Keras
 
 inception_block = __import__('0-inception_block').inception_block
 
@@ -16,100 +16,51 @@ def inception_network():
 
     Returns: the keras model
     """
-    initdeep = K.initializers.he_normal()
+    X = Keras.Input(shape=(224, 224, 3))
+    init = Keras.initializers.he_normal()
+    activation = 'relu'
+    padding="same"
 
-    # THE SHAPE OF THE INPUT
-    X = K.Input(shape=(224, 224, 3))
+    conv_1 = Keras.layers.Conv2D(filters=64, kernel_size=7, strides=(2, 2),
+                             padding=padding, activation=activation,
+                             kernel_initializer=init)(X)
+    max_pool_1 = Keras.layers.MaxPooling2D(pool_size=[3, 3], strides=(2, 2),
+                                       padding=padding)(conv_1)
+    conv_2P = Keras.layers.Conv2D(filters=64, kernel_size=1, padding='valid',
+                              activation=activation,
+                              kernel_initializer=init)(max_pool_1)
+    conv_2 = Keras.layers.Conv2D(filters=192, kernel_size=3, padding=padding,
+                             activation=activation,
+                             kernel_initializer=init)(conv_2P)
+    max_pool_2 = Keras.layers.MaxPooling2D(pool_size=[3, 3], strides=(2, 2),
+                                       padding=padding)(conv_2)
 
-    output_layer_1 = K.layers.Conv2D(
-        filters=64,
-        kernel_size=7,
-        padding='same',
-        strides=2,
-        kernel_initializer=initdeep,
-        activation='relu'
-    )(X)
+    bck_1 = inception_block(max_pool_2, [64, 96, 128, 16, 32, 32])
+    bck_2 = inception_block(bck_1, [128, 128, 192, 32, 96, 64])
 
-    output_layer_2 = K.layers.MaxPool2D(
-        pool_size=3,
-        padding='same',
-        strides=2
-    )(output_layer_1)
+    max_pool_3 = Keras.layers.MaxPooling2D(pool_size=[3, 3], strides=(2, 2),
+                                       padding=padding)(bck_2)
 
-    layer_output_3R = K.layers.Conv2D(
-        filters=64,
-        kernel_size=1,
-        padding='same',
-        strides=1,
-        kernel_initializer=initdeep,
-        activation='relu'
-    )(output_layer_2)
+    bck_3 = inception_block(max_pool_3, [192, 96, 208, 16, 48, 64])
+    bck_4 = inception_block(bck_3, [160, 112, 224, 24, 64, 64])
+    bck_5 = inception_block(bck_4, [128, 128, 256, 24, 64, 64])
+    bck_6 = inception_block(bck_5, [112, 144, 288, 32, 64, 64])
+    bck_7 = inception_block(bck_6, [256, 160, 320, 32, 128, 128])
 
-    layer_3 = K.layers.Conv2D(
-        filters=192,
-        kernel_size=3,
-        padding='same',
-        strides=1,
-        kernel_initializer=initdeep,
-        activation='relu'
-    )(layer_output_3R)
+    max_pool_4 = Keras.layers.MaxPooling2D(pool_size=[3, 3], strides=(2, 2),
+                                       padding=padding)(bck_7)
 
-    layer_4 = K.layers.MaxPool2D(
-        pool_size=3,
-        padding='same',
-        strides=2
-    )(layer_3)
+    bck_8 = inception_block(max_pool_4, [256, 160, 320, 32, 128, 128])
+    bck_9 = inception_block(bck_8, [384, 192, 384, 48, 128, 128])
 
-    output_layer_5 = inception_block(layer_4, [64, 96, 128, 16, 32, 32])
-    output_layer_6 = inception_block(
-        output_layer_5, [128, 128, 192, 32, 96, 64])
+    avg_pool = Keras.layers.AveragePooling2D(pool_size=[7, 7], strides=(1, 1),
+                                         padding='valid')(bck_9)
 
-    output_layer_7 = K.layers.MaxPool2D(
-        pool_size=3,
-        padding='same',
-        strides=2
-    )(output_layer_6)
+    dropout = Keras.layers.Dropout(.4)(avg_pool)
 
-    output_layer_8 = inception_block(
-        output_layer_7, [192, 96, 208, 16, 48, 64]
-    )
-    output_layer_9 = inception_block(
-        output_layer_8, [160, 112, 224, 24, 64, 64]
-    )
-    output_layer_10 = inception_block(
-        output_layer_9, [128, 128, 256, 24, 64, 64]
-    )
-    output_layer_11 = inception_block(
-        output_layer_10, [112, 144, 288, 32, 64, 64]
-    )
-    output_layer_12 = inception_block(
-        output_layer_11, [256, 160, 320, 32, 128, 128])
+    FC = Keras.layers.Dense(1000, activation='softmax',
+                        kernel_initializer=init)(dropout)
 
-    layer_output_13 = K.layers.MaxPool2D(
-        pool_size=3,
-        padding='same',
-        strides=2
-    )(output_layer_12)
+    model = Keras.models.Model(inputs=X, outputs=FC)
 
-    layer_output_14 = inception_block(
-        layer_output_13, [256, 160, 320, 32, 128, 128])
-    layer_output_15 = inception_block(
-        layer_output_14, [384, 192, 384, 48, 128, 128])
-
-    output_layer_16 = K.layers.AvgPool2D(
-        pool_size=7,
-        padding='same',
-        strides=None
-    )(layer_output_15)
-
-    output_layer_17 = K.layers.Dropout(0.4)(output_layer_16)
-
-    output_layer_18 = K.layers.Dense(
-        units=1000,
-        # here pass 'softmax' activation to the model
-        activation='softmax',
-        kernel_initializer=initdeep,
-        kernel_regularizer=K.regularizers.l2()
-    )(output_layer_17)
-
-    return K.models.Model(inputs=X, outputs=output_layer_18)
+    return model
