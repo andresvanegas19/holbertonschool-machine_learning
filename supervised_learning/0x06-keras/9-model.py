@@ -4,7 +4,6 @@
 import tensorflow.keras as Keras
 
 
-
 def save_model(network, filename):
     """[summary]
 
