@@ -52,3 +52,48 @@ def determinant(matrix):
         co *= -1
 
     return d
+
+
+def minor(matrix):
+    """
+    calculates the minor matrix of a matrix
+
+    Args:
+        matrix (list of list):  whose determinant should be calculated
+
+    Raises:
+        TypeError: If matrix is not square
+        ValueError: If matrix is not a list of lists
+
+    Returns:
+        [int]: the determinant of matrix
+    """
+
+    if type(matrix) is not list or not len(matrix):
+        raise TypeError("matrix must be a list of lists")
+
+    if matrix == [[]]:
+        raise ValueError("matrix must be a square matrix")
+
+    for i in range(len(matrix)):
+        if len(matrix) != len(matrix[i]):
+            raise ValueError("matrix must be a square matrix")
+        if type(matrix[i]) is not list or not len(matrix[i]):
+            raise TypeError("matrix must be a list of lists")
+
+    if len(matrix) == 1:
+        return [[1]]
+
+    minor = []
+
+    for i in range(len(matrix)):
+        pending = []
+        for j in range(len(matrix)):
+            mat = [vec[:] for vec in matrix]
+            del mat[i]
+            for line in mat:
+                del line[j]
+            det = determinant(mat)
+            pending.append(det)
+        minor.append(pending)
+    return minor
