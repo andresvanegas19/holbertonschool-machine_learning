@@ -73,7 +73,10 @@ def minor(matrix):
         raise TypeError("matrix must be a list of lists")
 
     if matrix == [[]]:
-        raise ValueError("matrix must be a square matrix")
+        raise ValueError("matrix must be a non-empty square matrix")
+
+    if len(matrix) != len(matrix[0]):
+        raise ValueError("matrix must be a non-empty square matrix")
 
     for i in range(len(matrix)):
         if len(matrix) != len(matrix[i]):
@@ -99,54 +102,20 @@ def minor(matrix):
     return minor
 
 
-def rs_ontacor(matrix):
-    """[summary]
+def cofactor(matrix):
+    """
+    calculates the cofactor matrix of a matrix
 
     Args:
         matrix ([type]): [description]
 
-    Raises:
-        TypeError: [description]
-        ValueError: [description]
-        ValueError: [description]
-        TypeError: [description]
-
     Returns:
         [type]: [description]
     """
-    if type(matrix) is not list or not len(matrix):
-        raise TypeError("matrix must be a list of lists")
+    minx = minor(matrix)
+    cf = minx.copy()
 
-    if matrix == [[]]:
-        raise ValueError("matrix must be a square matrix")
-
-    for i in range(len(matrix)):
-        if len(matrix) != len(matrix[i]):
-            raise ValueError("matrix must be a square matrix")
-        if type(matrix[i]) is not list or not len(matrix[i]):
-            raise TypeError("matrix must be a list of lists")
-
-    if len(matrix) == 1:
-        return [[1]]
-
-    minor = []
-
-    for i in range(len(matrix)):
-        resolve = []
-
-        if i % 2 != 0:
-            rs_ontac = -1
-        else:
-            rs_ontac = 1
-
-        for j in range(len(matrix[0])):
-            moch = [vec[:] for vec in matrix]
-            del moch[i]
-            for m in moch:
-                del m[j]
-            det = determinant(moch) * rs_ontac
-            resolve.append(det)
-            rs_ontac = rs_ontac * (-1)
-        minor.append(resolve)
-
-    return minor
+    for i in range(len(minx)):
+        for j in range(len(minx)):
+            cf[i][j] = cf[i][j] * (-1)**(i + j)
+    return cf
