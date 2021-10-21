@@ -142,17 +142,17 @@ def inverse(matrix):
     Returns: the inversed matrix
     """
 
-    # if type(matrix) != list or matrix == [] or type(matrix[0]) != list:
-    #     raise TypeError('matrix must be a list of lists')
+    if type(matrix) != list or matrix == [] or type(matrix[0]) != list:
+        raise TypeError('matrix must be a list of lists')
 
-    # if matrix == [[]]:
-    #     raise ValueError('matrix must be a non-empty square matrix')
+    if matrix == [[]]:
+        raise ValueError('matrix must be a non-empty square matrix')
 
-    # for i in matrix:
-    #     if type(i) != list:
-    #         raise TypeError('matrix must be a list of lists')
-    #     if len(i) != len(matrix):
-    #         raise ValueError('matrix must be a non-empty square matrix')
+    for i in matrix:
+        if type(i) != list:
+            raise TypeError('matrix must be a list of lists')
+        if len(i) != len(matrix):
+            raise ValueError('matrix must be a non-empty square matrix')
 
     r_determinat = determinant(matrix)
 
