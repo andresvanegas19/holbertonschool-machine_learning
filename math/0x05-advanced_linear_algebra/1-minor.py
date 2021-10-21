@@ -17,41 +17,30 @@ def determinant(matrix):
         [int]: the determinant of matrix
     """
 
-    if type(matrix) is not list:
-        raise TypeError("matrix must be a list of lists")
-
-    if matrix == [[]]:
-        return 1
-
-    for i in range(len(matrix)):
-        # check the b option in [[][]]
-        if len(matrix) != len(matrix[i]):
-            raise ValueError("matrix must be a square matrix")
-
-        if type(matrix[i]) is not list or not len(matrix[i]):
-            raise TypeError("matrix must be a list of lists")
-
     if len(matrix) == 1:
         return matrix[0][0]
 
     if len(matrix) == 2:
-        return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+        return (
+            (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0])
+        )
 
-    d = 0
-    co = 1
+    result = 0
+    for i, j in enumerate(matrix[0]):
+        # change for no validate
+        row = [v for v in matrix[1:]]
+        appabs = []
 
-    for i in range(len(matrix[0])):
-        res = [vec[:] for vec in matrix]
-        del res[0]
+        for num in row:
+            a_num = []
 
-        for m in res:
-            # r de vecto in de matrix
-            del m[i]
+            for l_max in range(len(matrix)):
+                if l_max != i:
+                    a_num.append(num[l_max])
 
-        d += matrix[0][i] * determinant(res) * co
-        co *= -1
-
-    return d
+            appabs.append(a_num)
+        result = result + j * (-1) ** i * determinant(appabs)
+    return result
 
 
 def minor(matrix):
@@ -88,12 +77,18 @@ def minor(matrix):
 
     for i in range(len(matrix)):
         pending = []
+        # move the a
         for j in range(len(matrix)):
             mat = [vec[:] for vec in matrix]
             del mat[i]
+            # del { to v }
             for line in mat:
                 del line[j]
+
             det = determinant(mat)
             pending.append(det)
+
+        # append the minor
         minor.append(pending)
+
     return minor
