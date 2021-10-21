@@ -130,24 +130,3 @@ def adjugate(matrix):
         res.append(u_n)
 
     return res
-
-
-def inverse(matrix):
-    """
-    calculates the inverse of a matrix
-
-    Args:
-        matrix: a list of lists whose adjugate matrix should be calculated
-
-    Returns: the inversed matrix
-    """
-
-    if determinant(matrix) == 0:
-        return None
-
-    return [
-        [
-            adjugate(matrix)[i][j] / determinant(matrix)
-            for j in range(len(matrix[0]))
-        ] for i in range(len(matrix))
-    ]
