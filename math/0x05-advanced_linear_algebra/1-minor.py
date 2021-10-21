@@ -40,6 +40,7 @@ def determinant(matrix):
 
             appabs.append(a_num)
         result = result + j * (-1) ** i * determinant(appabs)
+
     return result
 
 
@@ -58,23 +59,19 @@ def minor(matrix):
         [int]: the determinant of matrix
     """
 
-    if type(matrix) is not list or not len(matrix):
-        raise TypeError("matrix must be a list of lists")
+    if not isinstance(matrix, list) or matrix == []:
+        raise TypeError('matrix must be a list of lists')
 
-    if matrix == [[]]:
-        raise ValueError("matrix must be a square matrix")
+    if any(not isinstance(row, list) for row in matrix):
+        raise TypeError('matrix must be a list of lists')
 
-    for i in range(len(matrix)):
-        if len(matrix) != len(matrix[i]):
-            raise ValueError("matrix must be a square matrix")
-        if type(matrix[i]) is not list or not len(matrix[i]):
-            raise TypeError("matrix must be a list of lists")
+    if any(len(row) != len(matrix) for row in matrix):
+        raise ValueError('matrix must be a non-empty square matrix')
 
     if len(matrix) == 1:
         return [[1]]
 
     minor = []
-
     for i in range(len(matrix)):
         pending = []
         # move the a
