@@ -20,29 +20,22 @@ class MultiNormal:
 
     def pdf(self, x):
         """ Calculates the PDF of the gaussian distribution """
-        if type(x) != np.ndarray:
+
+        if not isinstance(x, np.ndarray):
             raise TypeError('x must be a numpy.ndarray')
 
-        dimension = self.cov.shape[0]
+        dimension, _ = self.cov.shape
 
-        if len(x.shape) != 2:
+        if len(x.shape) != 2 or x.shape[1] != 1 or x.shape[0] != dimension:
             raise ValueError(
                 'x must have the shape ({}, 1)'.format(dimension)
             )
 
-        if x.shape[0] != dimension or x.shape[1] != 1:
-            raise ValueError(
-                'x must have the shape ({}, 1)'.format(dimension)
-            )
-
-        dem = np.sqrt(
-            ((2 * np.pi) ** x.shape[0]) * np.linalg.det(self.cov)
+        dirc = np.dot(
+            np.dot((x - self.mean).T, np.linalg.inv(self.cov)), (x - self.mean)
         )
-
-        expo = -0.5 * np.matmul(
-            np.matmul(
-                (x - self.mean).T, np.linalg.inv(self.cov)
-            ), x - self.mean
-        )
-
-        return (1 / dem) * np.exp(expo[0][0])
+        pdf = (1 / (
+            ((2 * np.pi) ** (dimension / 2)) *
+            (np.sqrt(np.linalg.det(self.cov)))
+        )) * np.exp((-1 / 2) * dirc)
+        return pdf[0][0]
