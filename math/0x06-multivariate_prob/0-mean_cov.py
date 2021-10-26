@@ -30,7 +30,6 @@ def mean_cov(X):
     if X.shape[0] < 2:
         raise ValueError("X must contain multiple data points")
 
-
     data_points, dimension = X.shape
     mean = np.mean(X, axis=0).reshape(1, dimension)
     tot = X - mean
