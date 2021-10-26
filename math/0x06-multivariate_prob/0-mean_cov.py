@@ -24,7 +24,7 @@ def mean_cov(X):
         the mean of the data set
     """
 
-    if len(X.shape) != 2 or type(X) != np.ndarray:
+    if type(X) != np.ndarray or len(X.shape) != 2:
         raise TypeError("X must be a 2D numpy.ndarray")
 
     if X.shape[0] < 2:
