@@ -20,12 +20,17 @@ def grads(Y, P):
     # num is the number of points in Y
     affinQ, num = Q_affinities(Y)
 
-    # dY is the gradient of Y
+    # dY is the gradient of Y filled by zeros
     dY = np.zeros((a, dim))
     # b is the gradient of the Q affinities
-    grandB = np.expand_dims(((P - affinQ) * num).T, axis=2)
+    PQ = P - affinQ
 
     for i in range(a):
-        dY[i, :] = np.sum((grandB[i, :] * Y[i, :] - Y), 0)
+        # here we calculate the gradient of Y for
+        # each point i in Y and add it dY
+        dY[i, :] = np.sum(
+            np.tile(PQ[:, i] * num[:, i], (dim, 1)).T * (Y[i, :] - Y),
+            0
+        )
 
     return dY, affinQ
