@@ -79,8 +79,11 @@ def intersection(x, n, P, Pr):
         raise ValueError("Pr must sum to 1")
 
     # Compute the likelihood of x given n
+    res = np.math.factorial(n) / (
+        np.math.factorial(x) * np.math.factorial(n-x)
+    )
     likelihood = \
-        P ** x * (np.math.factorial(n) / (np.math.factorial(x) * np.math.factorial(n-x))) \
+        P ** x * res \
         * (1-P) ** (n-x)
 
     return likelihood * Pr

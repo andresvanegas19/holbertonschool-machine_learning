@@ -43,7 +43,8 @@ def likelihood(x, n, P):
         if pte < 0 or pte > 1:
             raise ValueError("All values in P must be in the range [0, 1]")
 
-    return \
-        (np.math.factorial(n) / (np.math.factorial(x) * np.math.factorial(n - x))) * \
-        (P ** x) * \
-        (1 - P) ** (n - x)
+    res = np.math.factorial(n) / (
+        np.math.factorial(x) * np.math.factorial(n - x)
+    )
+
+    return res * (P ** x) * (1 - P) ** (n - x)
