@@ -30,3 +30,7 @@ What is t-distributed stochastic neighbor embedding (t-SNE)?
 What is a manifold?
 What is the difference between linear and non-linear dimensionality reduction?
 Which techniques are linear/non-linear?
+
+
+Performance between SVD and EIG
+Here a graph of execution time (Y-axis) for the number of iteration (X-axis) - red line is EIG and blue line is SVG
