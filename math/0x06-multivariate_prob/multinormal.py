@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" c of multinormal """
+""" multinormal """
 
 import numpy as np
 
@@ -8,15 +8,17 @@ class MultiNormal:
     """ Class that calculates the PDF at a data point  """
 
     def __init__(self, data):
-        if type(data) is not np.ndarray or len(data.shape) != 2:
+        """ class constructor """
+
+        if not isinstance(data, np.ndarray) or len(data.shape) != 2:
             raise TypeError("data must be a 2D numpy.ndarray")
 
         if data.shape[1] < 2:
             raise ValueError("data must contain multiple data points")
 
-        # init the declaration of the class
-        self.mean = np.mean(data, axis=1).reshape((data.shape[0], 1))
-        self.cov = np.matmul(data - self.mean, data.T) / (data.shape[1] - 1)
+        self.mean = np.mean(data, axis=1).reshape(data.shape[0], 1)
+        cov = data - self.mean
+        self.cov = np.dot(cov, cov.T) / (data.shape[1] - 1)
 
     def pdf(self, x):
         """ Calculates the PDF of the gaussian distribution """
