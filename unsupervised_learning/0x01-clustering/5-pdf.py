@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""Function that calculates the probability
-density function of a Gaussian distribution"""
+""" Do clustering scikit-learn """
 
 import numpy as np
 
