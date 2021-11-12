@@ -20,13 +20,17 @@ def absorbing(P):
             or P.shape[0] < 1:
         return None
 
-    if np.all(np.diag(P) == 1):
+    dg_v = np.diag(P)
+    if (dg_v == 1).all():
         return True
 
-    if P[0, 0] != 1:
-        return False
+    b_inf = (dg_v == 1)
+    for x in range(len(dg_v)):
+        for y in range(len(dg_v)):
+            if P[x, y] > 0 and b_inf[y]:
+                b_inf[x] = 1
 
-    if np.all(np.count_nonzero(P[1:, 1:], axis=0) > 2):
+    if (b_inf == 1).all():
         return True
 
     return False
