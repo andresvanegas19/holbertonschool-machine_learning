@@ -99,37 +99,40 @@ def baum_welch(Observations, Transition, Emission, Initial, iterations=1000):
     Returns:
         returns the converged Transition, Emission, and Initial matrices
     """
-    T = Observations.shape[0]
-    # M is the number of possible observations
-    M, N = Emission.shape
+    try:
+        T = Observations.shape[0]
+        # M is the number of possible observations
+        M, N = Emission.shape
 
-    for _ in range(1, iterations):
-        F = forward(Observations, Emission, Transition, Initial)
-        B = backward(Observations, Emission, Transition, Initial)
-        xi = np.zeros((M, M, T - 1))
+        for _ in range(1, iterations):
+            F = forward(Observations, Emission, Transition, Initial)
+            B = backward(Observations, Emission, Transition, Initial)
+            xi = np.zeros((M, M, T - 1))
 
-        for i in range(T - 1):
-            den = np.dot(
-                np.dot(F[:, i].T, Transition) *
-                Emission[:, Observations[i + 1]].T, B[:, i + 1]
+            for i in range(T - 1):
+                den = np.dot(
+                    np.dot(F[:, i].T, Transition) *
+                    Emission[:, Observations[i + 1]].T, B[:, i + 1]
+                )
+
+                for j in range(M):
+                    num = F[j, i] * Transition[j] *\
+                        Emission[:, Observations[i + 1]].T * B[:, i + 1].T
+                    xi[j, :, i] = num / den
+
+            gm = np.sum(xi, axis=1)
+            Transition = np.sum(xi, 2) / np.sum(gm, axis=1).reshape((-1, 1))
+            gm = np.hstack(
+                (
+                    gm,
+                    np.sum(xi[:, :, T - 2], axis=0).reshape((-1, 1))
+                )
             )
+            denom = np.sum(gm, axis=1)
 
-            for j in range(M):
-                num = F[j, i] * Transition[j] *\
-                    Emission[:, Observations[i + 1]].T * B[:, i + 1].T
-                xi[j, :, i] = num / den
+            for i in range(N):
+                Emission[:, i] = np.sum(gm[:, Observations == i], axis=1)
 
-        gm = np.sum(xi, axis=1)
-        Transition = np.sum(xi, 2) / np.sum(gm, axis=1).reshape((-1, 1))
-        gm = np.hstack(
-            (
-                gm,
-                np.sum(xi[:, :, T - 2], axis=0).reshape((-1, 1))
-            )
-        )
-        denom = np.sum(gm, axis=1)
-
-        for i in range(N):
-            Emission[:, i] = np.sum(gm[:, Observations == i], axis=1)
-
-    return Transition, np.divide(Emission, denom.reshape((-1, 1)))
+        return Transition, np.divide(Emission, denom.reshape((-1, 1)))
+    except Exception:
+        return None, None
