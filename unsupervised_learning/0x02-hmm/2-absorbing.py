@@ -14,23 +14,23 @@ def absorbing(P):
     return:
         retruns a bool that means if the matrix is absorbing or not
     """
-    if not isinstance(P, np.ndarray) \
-            or len(P.shape) != 2 \
+    if type(P) is not np.ndarray or len(P.shape) != 2 \
             or P.shape[0] != P.shape[1] \
-            or P.shape[0] < 1:
-        return None
+            or np.min(P ** 2) < 0 or np.min(P ** 3) < 0:
+        return False
 
-    dg_v = np.diag(P)
-    if (dg_v == 1).all():
+    sb = np.where(np.diag(P) == 1)
+    if len(sb[0]) == P.shape[0]:
+        return True
+    if len(sb[0]) == 0:
+        return False
+
+    B = np.delete(np.delete(np.copy(P), sb[0], 0), sb[0], 1)
+    In = np.identity(B.shape[0])
+
+    try:
+        np.linalg.inv(In - B)
         return True
 
-    b_inf = (dg_v == 1)
-    for x in range(len(dg_v)):
-        for y in range(len(dg_v)):
-            if P[x, y] > 0 and b_inf[y]:
-                b_inf[x] = 1
-
-    if (b_inf == 1).all():
-        return True
-
-    return False
+    except Exception:
+        return False
