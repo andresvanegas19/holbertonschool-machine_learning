@@ -60,16 +60,34 @@ class BayesianOptimization:
                 the expected improvement of each potential sample
         """
 
-        sigm, _ = self.gp.predict(self.gp.X)
-        next_fs, gc_var = self.gp.predict(self.X_s)
-        opt = np.min(sigm)
-        improves = opt - next_fs - self.xsi
+        mu, sigma = self.gp.predict(self.X_s)
+        # mu_sample = self.p.predict(X_sample)
 
-        # Compute EI in negative space
-        if not self.minimize:
-            improve = -improves
+        # sigma = sigma.reshape(-1, 1)
 
-        Z = improves / gc_var
-        eis = improves * norm.cdf(Z) + gc_var * norm.pdf(Z)
+        # sigm, _ = self.gp.predict(self.gp.X)
+        # next_fs, gc_var = self.gp.predict(self.X_s)
+        # opt = np.min(sigm)
+        # improves = opt - next_fs - self.xsi
+        # Needed for noise-based model,
+        # otherwise use np.max(Y_sample).
+        # See also section 2.4 in [1]
+        if self.minimize is True:
+            samp_y = np.min(self.gp.Y)
+            improves = samp_y - mu - self.xsi
+        # # Compute EI in negative space
+        # if not self.minimize:
+        #     improve = -improves
+        else:
+            samp_y = np.max(self.gp.Y)
+            improves = mu - samp_y - self.xsi
 
-        return self.X_s[np.argmax(eis)], eis
+        with np.errstate(divide='warn'):
+
+            Z = improves / sigma
+            ei = improves * norm.cdf(Z) + sigma * norm.pdf(Z)
+            ei[sigma == 0.0] = 0.0
+        # Z = improves / gc_var
+        # eis = improves * norm.cdf(Z) + gc_var * norm.pdf(Z)
+
+        return self.X_s[np.argmax(ei)], ei
