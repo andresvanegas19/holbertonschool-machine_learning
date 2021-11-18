@@ -79,3 +79,30 @@ class BayesianOptimization:
             EI = improve * norm.cdf(z_arr_sam) + sigmna * norm.pdf(z_arr_sam)
 
         return self.X_s[np.argmax(EI)], EI
+
+    def optimize(self, iterations=100):
+        """
+        Optimizes the black-box function
+
+        args:
+            iterations: is the number of iterations to perform
+
+        Returns:
+            X_opt is a numpy.ndarray of shape (1,)
+                representing the optimal point
+            Y_opt is a numpy.ndarray of shape (1,)
+                representing the optimal function value
+        """
+        for _ in range(0, iterations):
+            X_next, _ = self.acquisition()
+            if X_next in self.gp.X:
+                break
+
+            self.gp.update(X_next, self.f(X_next))
+
+        if self.minimize is True:
+            idx = np.argmin(self.gp.Y)
+        else:
+            idx = np.argmax(self.gp.Y)
+
+        return self.gp.X[idx], self.gp.Y[idx]
