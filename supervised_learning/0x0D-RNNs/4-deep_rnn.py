@@ -20,23 +20,22 @@ def deep_rnn(rnn_cells, X, h_0):
         - H: containing all of the hidden states
         - Y: containing all of the outputs
     """
-    h_pnex = h_0
-    L, m, i = h_0.shape
-
-    # Initialize H and Y
-    H = np.zeros((X.shape[0] + 1, L, m, i))
-    H[0] = h_0
-    # Y is a matrix of shape (t, m, i) containing the outputs
+    t, m, _ = X.shape
+    # output
+    L, _, h = h_0.shape
+    H = np.zeros((t + 1, L, m, h))
+    H[0, :, :, :] = h_0
     Y = []
 
-    for i_s in range(X.shape[0]):
-        h_prev = X[i_s]
+    for step in range(t):
         for layer in range(L):
-            # here we are using the previous hidden state as the input
-            h_pnex, y = rnn_cells[layer].forward(H[i_s, layer], h_prev)
-            h_prev = h_pnex
-            # store the hidden state
-            H[i_s + 1, L, :, :] = h_pnex
+            # Calculate the output of the layer and not pass
+            if layer == 0:
+                h_next, y = rnn_cells[layer].forward(H[step, layer], X[step])
+            else:
+                h_next, y = rnn_cells[layer].forward(H[step, layer], h_next)
+            H[step + 1, layer] = h_next
         Y.append(y)
+    Y = np.array(Y)
 
     return H, Y
