@@ -32,8 +32,8 @@ class RNNCell():
             np.concatenate((h_prev, x_t), axis=1),
             self.Wh
         ) + self.bh
-        y = np.matmul(h_next, self.Wy) + self.by
-        y = np.exp(y) / np.sum(np.exp(y), axis=1, keepdims=True)
-
+        h_next = np.tanh(h_next)
         # over-write variables
-        return np.tanh(h_next), y
+        y = np.matmul(h_next, self.Wy) + self.by
+
+        return h_next, np.exp(y) / np.sum(np.exp(y), axis=1, keepdims=True)
