@@ -33,7 +33,7 @@ class RNNCell():
             self.Wh
         ) + self.bh
         y = np.matmul(h_next, self.Wy) + self.by
+        y = np.exp(y) / np.sum(np.exp(y), axis=1, keepdims=True)
 
-        return \
-            np.tanh(h_next), \
-            np.exp(y) / np.sum(np.exp(y), axis=1, keepdims=True)
+        # over-write variables
+        return np.tanh(h_next), y
