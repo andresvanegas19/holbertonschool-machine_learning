@@ -29,7 +29,7 @@ class GRUCell():
             h_prev is a numpy.ndarray of shape (m, h) containing the previous
                    hidden state
 
-        Returns: h_next, y
+        Returns:
             - h_next is the next hidden state
             - y is the output of the cell
         """
