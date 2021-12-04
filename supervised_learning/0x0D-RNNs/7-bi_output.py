@@ -53,11 +53,10 @@ class BidirectionalCell():
 
         for steps in range(T):
             Y[steps] = np.matmul(H[steps], self.Wy) + self.by
-            Y[steps] = np.exp(Y[steps]) / \
-                        np.sum(
-                            np.exp(Y[steps]),
-                            axis=1,
-                            keepdims=True
-                        )
+            Y[steps] = np.exp(Y[steps]) / np.sum(
+                np.exp(Y[steps]),
+                axis=1,
+                keepdims=True
+            )
 
         return Y
