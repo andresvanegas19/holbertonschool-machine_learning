@@ -12,13 +12,13 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         super(MultiHeadAttention, self).__init__()
         self.h = h
         self.dm = dm
-        self.depth = int(self.dm // self.h)
+        self.depth = dm // h
         self.Wq = tf.keras.layers.Dense(dm)
         self.Wk = tf.keras.layers.Dense(dm)
         self.Wv = tf.keras.layers.Dense(dm)
         self.linear = tf.keras.layers.Dense(dm)
 
-    def split_heads(self, m, batch):
+    def s_head(self, x, batch):
         """
         split last dim shape transpose result shape
 
@@ -29,9 +29,8 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         Returns:
             tensor shape (batch, h, seq_len, depth)
         """
-        m = tf.reshape(m, (batch, -1, self.h, self.depth))
-
-        return tf.transpose(m, perm=[0, 2, 1, 3])
+        x = tf.reshape(x, (batch, -1, self.h, self.depth))
+        return tf.transpose(x, perm=[0, 2, 1, 3])
 
     def call(self, Q, K, V, mask):
         """
@@ -50,19 +49,25 @@ class MultiHeadAttention(tf.keras.layers.Layer):
             w: tensor with last three dims
                 (..., h, seq_len_q, seq_len_v) contains attention w
         """
-        batch = tf.shape(K)[0]
-        Q = self.Wq(Q)
-        K = self.Wk(K)
-        V = self.Wv(V)
+        batch = tf.shape(Q)[0]
 
-        Q = self.splitHeads(Q, batch)
-        K = self.splitHeads(K, batch)
-        V = self.splitHeads(V, batch)
+        q = self.Wq(Q)
+        k = self.Wk(K)
+        v = self.Wv(V)
+        q = self.s_head(q, batch)
+        k = self.s_head(k, batch)
+        v = self.s_head(v, batch)
 
-        output, w = sdp_attention(Q, K, V, mask)
+        scaled, wights_atten = sdp_attention(q, k, v, mask)
+        scaled = tf.transpose(
+            scaled,
+            perm=[0, 2, 1, 3]
+        )
 
-        output = tf.transpose(output, perm=[0, 2, 1, 3])
-        output = tf.reshape(output, (batch, -1, self.dm))
-        output = self.linear(output)
+        c_attetion = tf.reshape(
+            scaled,
+            (batch, -1, self.dm)
+        )
+        output = self.linear(c_attetion)
 
-        return output, w
+        return output, wights_atten
