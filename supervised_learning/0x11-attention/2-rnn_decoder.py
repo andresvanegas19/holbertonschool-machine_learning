@@ -18,14 +18,17 @@ class RNNDecoder(tf.keras.layers.Layer):
             batch (integer): batch size
         """
         super(RNNDecoder, self).__init__()
+        self.batch = batch
+        self.units = units
         self.embedding = tf.keras.layers.Embedding(vocab, embedding)
         self.gru = tf.keras.layers.GRU(
             units,
-            recurrent_initializer='glorot_uniform',
+            recurrent_initializer="glorot_uniform",
             return_sequences=True,
             return_state=True
         )
         self.F = tf.keras.layers.Dense(vocab)
+        self.attention = SelfAttention(self.units)
 
     def call(self, x, s_prev, hidden_states):
         """
