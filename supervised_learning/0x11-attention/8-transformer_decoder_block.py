@@ -24,10 +24,10 @@ class DecoderBlock(tf.keras.layers.Layer):
             units=hidden,
             activation='relu'
         )
+        self.dense_output = tf.keras.layers.Dense(units=dm)
         self.layernorm1 = tf.keras.layers.LayerNormalization(epsilon=1e-6)
         self.layernorm2 = tf.keras.layers.LayerNormalization(epsilon=1e-6)
         self.layernorm3 = tf.keras.layers.LayerNormalization(epsilon=1e-6)
-        self.dense_output = tf.keras.layers.Dense(units=dm)
         self.dropout1 = tf.keras.layers.Dropout(drop_rate)
         self.dropout2 = tf.keras.layers.Dropout(drop_rate)
         self.dropout3 = tf.keras.layers.Dropout(drop_rate)
@@ -50,21 +50,24 @@ class DecoderBlock(tf.keras.layers.Layer):
             a tensor of shape (batch, target_seq_len, dm)
             containing the block’s output
         """
-        # first attention block
-        a, _ = self.mha1(x, x, x, mask=look_ahead_mask)
-        b = self.dropout1(a, training=training)
-        # c = self.layernorm1(x + b)
-        c = self.layernorm1(b + x)
-        # decoder block
-        d, _ = self.mha2(c, encoder_output, encoder_output, mask=padding_mask)
-        # if self.dropout2 is not None:
-        e = self.dropout2(d, training=training)
-        f = self.layernorm2(e + c)
-        # Implement the second FFN
-        g = self.dense_hidden(f)
-        # g = self.dense_output(g)
-        h = self.dense_output(g)
-
-        return self.layernorm2(
-            self.dropout2(h, training=training) + f
+        attn1, _ = self.mha1(
+            x,
+            x,
+            x,
+            look_ahead_mask
         )
+        attn1 = self.dropout1(attn1, training=training)
+        out1 = self.layernorm1(attn1 + x)
+
+        attn2, _ = self.mha2(
+            out1,
+            encoder_output,
+            encoder_output,
+            padding_mask
+        )
+        attn2 = self.dropout2(attn2, training=training)
+
+        output_layer = self.layernorm2(attn2 + out1)
+        dense_output = self.dropout3(output_layer, training=training)
+
+        return self.layernorm3(dense_output + output_layer)
