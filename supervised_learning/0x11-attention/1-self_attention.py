@@ -24,7 +24,7 @@ class SelfAttention(tf.keras.layers.Layer):
         Public instance method
 
         Args:
-            s_prev (tensor of shape):  containing the previous decoder hidden state
+            s_prev (tensor of shape): the previous decoder hidden state
             hidden_states ([type]): [description]
         """
         new_s_prev = tf.expand_dims(s_prev, axis=1)
