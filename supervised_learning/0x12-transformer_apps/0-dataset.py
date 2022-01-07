@@ -4,7 +4,7 @@ import tensorflow.compat.v2 as tf
 import tensorflow_datasets as tfds
 
 
-class Dataset:
+class Dataset():
     """ Dataset loads and preps a dataset for machine translation """
 
     def __init__(self):
@@ -37,7 +37,8 @@ class Dataset:
             tokenizer_pt is the Portuguese tokenizer
             tokenizer_en is the English tokenizer
         """
-        subword = tfds.features.text.SubwordTextEncoder.build_from_corpus
+        subword = tfds.features.text.SubwordTextensorflow_texttEncoder.build_from_corpus
+        # subword = tfds.deprecated.text.SubwordTextEncoder.build_from_corpus
         tokenizer_en = subword(
             (en.numpy() for pt, en in data),
             target_vocab_size=2**15
