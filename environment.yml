@@ -1,0 +1,6 @@
+name: machine-learning
+channels:
+  - defaults
+  - conda-forge
+prefix:
+  /Users/andresreyes/Documents/study/holberton/machine-learning

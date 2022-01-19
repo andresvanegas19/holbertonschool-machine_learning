@@ -13,6 +13,8 @@ gar
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+qa
+ZendeskArticles
 *$py.class
 
 # C extensions
