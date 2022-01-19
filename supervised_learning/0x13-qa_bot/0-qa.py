@@ -46,5 +46,8 @@ def question_answer(question, reference):
     answer = tz.convert_tokens_to_string(
         tokens[short_start: short_end + 1]  # answer is inclusive
     )
+    if answer:
+        return answer
 
-    return answer
+    # If no answer is found, return None
+    return None
