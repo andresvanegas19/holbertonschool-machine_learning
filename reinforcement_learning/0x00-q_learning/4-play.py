@@ -23,6 +23,7 @@ def play(env, Q, max_steps=100):
         action = np.argmax(Q[state, :])
         state, reward, done, _ = env.step(action)
         env.render()
+        #
 
         if done:
             break
