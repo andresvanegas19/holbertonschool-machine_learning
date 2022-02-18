@@ -18,7 +18,7 @@ def epsilon_greedy(Q, state, epsilon):
     """
     limit = np.random.uniform(0, 1)
 
-    if epsilon < limit: # epsilon-greedy
+    if epsilon < limit:  # epsilon-greedy
         index = np.argmax(Q[state, :])
     else:
         index = np.random.randint(Q.shape[1])
