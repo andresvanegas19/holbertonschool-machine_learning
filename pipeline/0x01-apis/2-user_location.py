@@ -23,4 +23,4 @@ if __name__ == '__main__':
     if request.status_code == 403:
         limit = request.headers["X-Ratelimit-Reset"]
         x = int((int(limit) - int(time.time())) / 60)
-        print(f"Reset in {x} min")
+        print("Reset in " + str(x) + " min")

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """ data collection from APIs """
-import requests
+from requests import get
 
 
 def availableShips(passengerCount):
@@ -20,7 +20,7 @@ def availableShips(passengerCount):
     state = True
 
     while state:
-        request = requests.get(
+        request = get(
             "https://swapi-api.hbtn.io/api/starships/?page=" + str(page)
         )
         data = request.json()

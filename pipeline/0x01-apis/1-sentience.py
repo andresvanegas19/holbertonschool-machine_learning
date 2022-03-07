@@ -9,12 +9,12 @@ def sentientPlanets():
     sentient species.
     """
     result_planets = []
-    page = 1
+    n_page = 1
     state = True
 
     while state:
         req_species = get(
-            f"https://swapi-api.hbtn.io/api/species/?page={page}"
+            f"https://swapi-api.hbtn.io/api/species/?page=" + str(n_page)
         )
         data_species = req_species.json()
 
@@ -27,6 +27,6 @@ def sentientPlanets():
         if data_species['next'] is None:
             state = False
 
-        page += 1
+        n_page += 1
 
     return result_planets
