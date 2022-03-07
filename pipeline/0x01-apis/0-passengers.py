@@ -21,7 +21,7 @@ def availableShips(passengerCount):
 
     while state:
         request = requests.get(
-            f"https://swapi-api.hbtn.io/api/starships/?page={page}"
+            "https://swapi-api.hbtn.io/api/starships/?page=" + str(page)
         )
         data = request.json()
 
