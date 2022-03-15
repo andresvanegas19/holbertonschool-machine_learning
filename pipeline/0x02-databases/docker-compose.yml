@@ -1,16 +1,30 @@
 version: "3.8"
 services:
-    db:
-        # image: timescale/timescaledb:latest-pg12
-        image: mysql/mysql-server:5.7
-        container_name: "db"
-        environment:
-          - MYSQL_ROOT_PASSWORD=123
-        # environment:
-            # - POSTGRES_USER=postgres
-            # - POSTGRES_PASSWORD=postgres
-            # - APP_DB_USER=postgres
-            # - APP_DB_PASS=postgres
-            # - APP_DB_NAME=udb
-        ports:
-            - "5432:5432"
+  db:
+    # image: timescale/timescaledb:latest-pg12
+    image: mysql/mysql-server:5.7
+    container_name: "db"
+    environment:
+      - MYSQL_ROOT_PASSWORD=123
+    # environment:
+    # - POSTGRES_USER=postgres
+    # - POSTGRES_PASSWORD=postgres
+    # - APP_DB_USER=postgres
+    # - APP_DB_PASS=postgres
+    # - APP_DB_NAME=udb
+    ports:
+      - "5432:5432"
+  mongo:
+    # image: timescale/timescaledb:latest-pg12
+    image: mongo:4.2
+    container_name: "db"
+    # environment:
+    #   - MYSQL_ROOT_PASSWORD=123
+    # environment:
+    # - POSTGRES_USER=postgres
+    # - POSTGRES_PASSWORD=postgres
+    # - APP_DB_USER=postgres
+    # - APP_DB_PASS=postgres
+    # - APP_DB_NAME=udb
+    ports:
+      - "5432:5432"
