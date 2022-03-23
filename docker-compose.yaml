@@ -1,0 +1,10 @@
+# docker compoe for running a environment
+version: '3'
+
+services:
+  algo:
+    volumes:
+      - .:/code
+    image: tensorflow/tensorflow:latest
+    container_name: holb
+    command: tail -F anything
